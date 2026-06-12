@@ -6,491 +6,218 @@
 <title>Abeez Ladies Stitching Center – Pulpally, Wayanad</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ─── Reset & Base ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:#1a0a0e;
-  color:#f5e6e8;
-  cursor:none;
-  overflow-x:hidden;
-}
+body{font-family:'DM Sans',sans-serif;background:#1a0a0e;color:#f5e6e8;cursor:none;overflow-x:hidden;}
+@media(hover:none){body{cursor:auto;}#cursor,.trail-dot{display:none!important;}.btn-primary,.btn-ghost,a,button{cursor:pointer;}}
 
-/* ─── Custom Cursor ─── */
-#cursor{
-  position:fixed;top:0;left:0;
-  pointer-events:none;z-index:9999;
-  transform:translate(-50%,-50%);
-  transition:transform 0.1s ease;
-}
-#cursor-needle{
-  width:40px;height:40px;
-  position:relative;
-  transform:rotate(-45deg);
-}
-#cursor-needle svg{
-  width:100%;height:100%;
-  filter:drop-shadow(0 0 6px #e8789a);
-}
-#cursor-trail{
-  position:fixed;top:0;left:0;
-  pointer-events:none;z-index:9998;
-  transform:translate(-50%,-50%);
-}
-.trail-dot{
-  position:fixed;
-  width:5px;height:5px;
-  border-radius:50%;
-  background:rgba(232,120,154,0.5);
-  pointer-events:none;
-  z-index:9997;
-  transform:translate(-50%,-50%);
-  transition:opacity 0.5s ease;
-}
+/* ── Cursor ── */
+#cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cursor-needle{width:40px;height:40px;transform:rotate(-45deg);}
+#cursor-needle svg{width:100%;height:100%;filter:drop-shadow(0 0 6px #e8789a);}
+.trail-dot{position:fixed;width:5px;height:5px;border-radius:50%;background:rgba(232,120,154,0.5);pointer-events:none;z-index:9997;transform:translate(-50%,-50%);}
+@keyframes needlePulse{0%,100%{filter:drop-shadow(0 0 4px #e8789a);}50%{filter:drop-shadow(0 0 12px #e8789a) drop-shadow(0 0 24px #c04a70);}}
+#cursor-needle svg{animation:needlePulse 2s infinite;}
 
-/* ─── Palette ─── */
-:root{
-  --rose:     #e8789a;
-  --rose-deep:#c04a70;
-  --blush:    #f2c4d0;
-  --cream:    #f9f0f2;
-  --dark:     #1a0a0e;
-  --dark-mid: #2d1218;
-  --dark-card:#3b1a22;
-  --gold:     #d4a054;
-  --text-light:#f5e6e8;
-  --text-muted:#c49aaa;
-}
+/* ── Palette ── */
+:root{--rose:#e8789a;--rose-deep:#c04a70;--blush:#f2c4d0;--cream:#f9f0f2;--dark:#1a0a0e;--dark-mid:#2d1218;--dark-card:#3b1a22;--gold:#d4a054;--text-light:#f5e6e8;--text-muted:#c49aaa;}
 
-/* ─── Nav ─── */
-nav{
-  position:fixed;top:0;left:0;width:100%;
-  z-index:100;
-  padding:1rem 2rem;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(26,10,14,0.85);
-  backdrop-filter:blur(12px);
-  border-bottom:0.5px solid rgba(232,120,154,0.2);
-  transition:padding 0.3s;
-}
-nav.scrolled{padding:0.6rem 2rem;}
-.nav-brand{
-  font-family:'Playfair Display',serif;
-  font-size:1.25rem;
-  color:var(--rose);
-  letter-spacing:0.03em;
-  display:flex;align-items:center;gap:10px;
-}
-.nav-brand .needle-icon{font-size:22px;}
+/* ── Nav ── */
+nav{position:fixed;top:0;left:0;width:100%;z-index:200;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(26,10,14,0.88);backdrop-filter:blur(14px);border-bottom:0.5px solid rgba(232,120,154,0.2);transition:padding 0.3s;}
+nav.scrolled{padding:0.65rem 2rem;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose);letter-spacing:0.03em;display:flex;align-items:center;gap:8px;text-decoration:none;}
 .nav-links{display:flex;gap:2rem;}
-.nav-links a{
-  font-size:13px;font-weight:500;letter-spacing:0.05em;
-  color:var(--text-muted);text-decoration:none;
-  text-transform:uppercase;
-  transition:color 0.2s;
-  position:relative;
-}
-.nav-links a::after{
-  content:'';position:absolute;bottom:-3px;left:0;
-  width:0;height:1px;background:var(--rose);
-  transition:width 0.3s;
-}
+.nav-links a{font-size:13px;font-weight:500;letter-spacing:0.05em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;transition:color 0.2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--rose);transition:width 0.3s;}
 .nav-links a:hover{color:var(--rose);}
 .nav-links a:hover::after{width:100%;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:24px;height:1.5px;background:var(--rose);border-radius:2px;transition:transform 0.3s,opacity 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-nav{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(26,10,14,0.97);z-index:199;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.mobile-nav.open{opacity:1;pointer-events:all;}
+.mobile-nav a{font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream);text-decoration:none;transition:color 0.2s;}
+.mobile-nav a:hover{color:var(--rose);}
+.mobile-nav .close-btn{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--rose);font-size:2rem;cursor:pointer;line-height:1;}
 
-/* ─── Hero ─── */
-#hero{
-  min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  padding:6rem 2rem 4rem;
-}
-.hero-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 60% 40%, #3b0d1a 0%, #1a0a0e 70%);
-}
-.hero-threads{
-  position:absolute;inset:0;
-  pointer-events:none;
-  opacity:0.25;
-}
-.hero-content{
-  position:relative;z-index:2;
-  text-align:center;
-  max-width:700px;
-}
-.hero-eyebrow{
-  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--rose);margin-bottom:1.5rem;
-  opacity:0;transform:translateY(20px);
-  animation:fadeUp 0.8s 0.3s forwards;
-}
-.hero-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.8rem,7vw,5.5rem);
-  line-height:1.1;
-  color:var(--cream);
-  margin-bottom:1rem;
-  opacity:0;transform:translateY(30px);
-  animation:fadeUp 0.9s 0.5s forwards;
-}
-.hero-title em{
-  color:var(--rose);font-style:italic;
-}
-.hero-sub{
-  font-size:1rem;color:var(--text-muted);
-  line-height:1.8;margin-bottom:2.5rem;
-  opacity:0;transform:translateY(20px);
-  animation:fadeUp 0.8s 0.7s forwards;
-}
-.hero-ctas{
-  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
-  opacity:0;transform:translateY(20px);
-  animation:fadeUp 0.8s 0.9s forwards;
-}
-.btn-primary{
-  background:var(--rose);color:#fff;border:none;
-  padding:12px 28px;border-radius:2px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-  letter-spacing:0.08em;text-transform:uppercase;
-  cursor:none;transition:background 0.2s,transform 0.15s;
-}
-.btn-primary:hover{background:var(--rose-deep);transform:translateY(-2px);}
-.btn-ghost{
-  background:transparent;color:var(--rose);
-  border:1px solid var(--rose);
-  padding:12px 28px;border-radius:2px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-  letter-spacing:0.08em;text-transform:uppercase;
-  cursor:none;transition:background 0.2s,transform 0.15s;
-}
-.btn-ghost:hover{background:rgba(232,120,154,0.1);transform:translateY(-2px);}
+/* ── Hero ── */
+#hero{min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 1.5rem 4rem;}
+/* Dark overlay so canvas doesn't overpower text */
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,10,14,0.72) 0%,rgba(45,18,24,0.55) 50%,rgba(26,10,14,0.78) 100%);z-index:1;pointer-events:none;}
+/* The canvas fills the hero */
+#stitch-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:700px;width:100%;}
+.hero-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose);margin-bottom:1.25rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.8s 0.3s forwards;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,8vw,5.5rem);line-height:1.1;color:var(--cream);margin-bottom:1rem;opacity:0;transform:translateY(30px);animation:fadeUp 0.9s 0.5s forwards;text-shadow:0 2px 30px rgba(26,10,14,0.6);}
+.hero-title em{color:var(--rose);font-style:italic;}
+.hero-sub{font-size:clamp(0.875rem,3vw,1rem);color:var(--text-muted);line-height:1.8;margin-bottom:2rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.8s 0.7s forwards;}
+.hero-ctas{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:fadeUp 0.8s 0.9s forwards;}
 
-/* Floating thread animation in hero */
-.thread-line{
-  position:absolute;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--rose),transparent);
-  opacity:0;
-  animation:threadFloat 4s infinite;
-}
+/* ── Buttons ── */
+.btn-primary{background:var(--rose);color:#fff;border:none;padding:12px 24px;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,transform 0.15s;-webkit-tap-highlight-color:transparent;}
+.btn-primary:hover{background:var(--rose-deep);}
+.btn-primary:active{transform:scale(0.97);}
+.btn-ghost{background:transparent;color:var(--rose);border:1px solid var(--rose);padding:12px 24px;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,transform 0.15s;-webkit-tap-highlight-color:transparent;}
+.btn-ghost:hover{background:rgba(232,120,154,0.1);}
+.btn-ghost:active{transform:scale(0.97);}
 
-/* ─── Section Shared ─── */
-.section{padding:6rem 2rem;}
+/* ── Sections ── */
+.section{padding:5rem 1.5rem;}
 .section-inner{max-width:1100px;margin:0 auto;}
-.section-eyebrow{
-  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--rose);margin-bottom:0.75rem;
-}
-.section-heading{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,4vw,3rem);
-  color:var(--cream);margin-bottom:1rem;
-  line-height:1.2;
-}
+.section-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose);margin-bottom:0.75rem;}
+.section-heading{font-family:'Playfair Display',serif;font-size:clamp(1.75rem,5vw,3rem);color:var(--cream);margin-bottom:1rem;line-height:1.2;}
 .section-heading em{color:var(--rose);font-style:italic;}
-.divider{
-  width:60px;height:2px;
-  background:linear-gradient(90deg,var(--rose),transparent);
-  margin:1.5rem 0;
-}
+.divider{width:50px;height:2px;background:linear-gradient(90deg,var(--rose),transparent);margin:1.25rem 0;}
 
-/* ─── Services ─── */
+/* ── Services ── */
 #services{background:var(--dark-mid);}
-.services-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:1.5px;
-  margin-top:3rem;
-  border:1.5px solid rgba(232,120,154,0.12);
-}
-.service-item{
-  background:var(--dark-card);
-  padding:2.5rem 2rem;
-  position:relative;overflow:hidden;
-  transition:background 0.3s;
-}
-.service-item::before{
-  content:'';position:absolute;
-  top:0;left:0;width:100%;height:2px;
-  background:linear-gradient(90deg,var(--rose),transparent);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform 0.4s;
-}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5px;margin-top:2.5rem;border:1.5px solid rgba(232,120,154,0.12);}
+.service-item{background:var(--dark-card);padding:2rem 1.5rem;position:relative;overflow:hidden;transition:background 0.3s;}
+.service-item::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--rose),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
 .service-item:hover{background:#4a2030;}
 .service-item:hover::before{transform:scaleX(1);}
-.service-num{
-  font-family:'Playfair Display',serif;
-  font-size:3rem;color:rgba(232,120,154,0.1);
-  font-weight:600;line-height:1;margin-bottom:0.5rem;
-}
-.service-icon-wrap{
-  width:48px;height:48px;margin-bottom:1rem;
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(232,120,154,0.3);
-  border-radius:2px;
-}
-.service-icon-wrap svg{width:24px;height:24px;stroke:var(--rose);fill:none;stroke-width:1.5;}
-.service-name{
-  font-family:'Playfair Display',serif;
-  font-size:1.15rem;color:var(--cream);
-  margin-bottom:0.5rem;
-}
+.service-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:rgba(232,120,154,0.1);font-weight:600;line-height:1;margin-bottom:0.4rem;}
+.service-icon-wrap{width:44px;height:44px;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;border:1px solid rgba(232,120,154,0.3);border-radius:2px;}
+.service-icon-wrap svg{width:22px;height:22px;stroke:var(--rose);fill:none;stroke-width:1.5;}
+.service-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);margin-bottom:0.4rem;}
 .service-desc{font-size:13px;color:var(--text-muted);line-height:1.7;}
 
-/* ─── Why Us ─── */
+/* ── Why Us ── */
 #why{background:var(--dark);}
-.why-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:2rem;margin-top:3rem;
-}
-.why-item{text-align:center;}
-.why-circle{
-  width:72px;height:72px;
-  border-radius:50%;
-  border:1px solid rgba(232,120,154,0.3);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1rem;
-  transition:border-color 0.3s,background 0.3s;
-}
-.why-item:hover .why-circle{
-  background:rgba(232,120,154,0.1);
-  border-color:var(--rose);
-}
-.why-circle svg{width:28px;height:28px;stroke:var(--rose);fill:none;stroke-width:1.5;}
-.why-label{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:4px;}
-.why-desc{font-size:12px;color:var(--text-muted);line-height:1.6;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.why-item{text-align:center;padding:1.25rem 0.75rem;border:0.5px solid rgba(232,120,154,0.1);border-radius:2px;transition:border-color 0.3s,background 0.3s;}
+.why-item:hover{background:rgba(232,120,154,0.05);border-color:rgba(232,120,154,0.3);}
+.why-circle{width:66px;height:66px;border-radius:50%;border:1px solid rgba(232,120,154,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;transition:border-color 0.3s,background 0.3s;}
+.why-item:hover .why-circle{background:rgba(232,120,154,0.12);border-color:var(--rose);}
+.why-circle svg{width:26px;height:26px;stroke:var(--rose);fill:none;stroke-width:1.5;}
+.why-label{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:6px;}
+.why-desc{font-size:12px;color:var(--text-muted);line-height:1.65;}
 
-/* ─── Gallery placeholder ─── */
+/* ── Gallery ── */
 #gallery{background:var(--dark-mid);}
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  grid-template-rows:repeat(2,160px);
-  gap:4px;margin-top:3rem;
-}
-.gallery-cell{
-  background:var(--dark-card);
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:var(--text-muted);
-  letter-spacing:0.1em;text-transform:uppercase;
-  position:relative;overflow:hidden;
-  transition:transform 0.3s;
-}
-.gallery-cell::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(232,120,154,0.05),transparent);
-  pointer-events:none;
-}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,150px);gap:4px;margin-top:2.5rem;}
+.gallery-cell{background:var(--dark-card);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;position:relative;overflow:hidden;transition:transform 0.3s;}
+.gallery-cell::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,120,154,0.06),transparent);pointer-events:none;}
 .gallery-cell:first-child{grid-row:span 2;}
-.gallery-cell:hover{transform:scale(0.98);}
-.gallery-pattern{
-  position:absolute;inset:0;opacity:0.04;
-  background-image:
-    repeating-linear-gradient(45deg,var(--rose) 0,var(--rose) 1px,transparent 0,transparent 50%);
-  background-size:10px 10px;
-}
+.gallery-cell:active{transform:scale(0.97);}
+.gallery-pattern{position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(45deg,var(--rose) 0,var(--rose) 1px,transparent 0,transparent 50%);background-size:10px 10px;}
 
-/* ─── Testimonial ─── */
+/* ── Testimonial ── */
 #testimonials{background:var(--dark);}
-.testimonial-block{
-  max-width:680px;margin:3rem auto 0;
-  text-align:center;
-}
-.testimonial-quote{
-  font-family:'Playfair Display',serif;
-  font-size:1.3rem;font-style:italic;
-  color:var(--cream);line-height:1.7;
-  margin-bottom:1.5rem;
-  position:relative;
-}
-.testimonial-quote::before{
-  content:'"';
-  font-size:6rem;color:rgba(232,120,154,0.1);
-  font-family:'Playfair Display',serif;
-  position:absolute;top:-1.5rem;left:-1rem;
-  line-height:1;pointer-events:none;
-}
-.testimonial-author{
-  font-size:12px;letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--rose);
-}
+.testimonial-block{max-width:650px;margin:2.5rem auto 0;text-align:center;padding:0 0.5rem;}
+.testimonial-quote{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.3rem);font-style:italic;color:var(--cream);line-height:1.7;margin-bottom:1.25rem;position:relative;}
+.testimonial-quote::before{content:'\201C';font-size:5rem;color:rgba(232,120,154,0.1);font-family:'Playfair Display',serif;position:absolute;top:-1.25rem;left:-0.5rem;line-height:1;pointer-events:none;}
+.testimonial-author{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--rose);}
 .stars{color:var(--gold);font-size:14px;margin-bottom:1rem;}
 
-/* ─── Contact ─── */
+/* ── Contact ── */
 #contact{background:var(--dark-mid);}
-.contact-wrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:3rem;
-  margin-top:3rem;
-}
-@media(max-width:700px){
-  .contact-wrap{grid-template-columns:1fr;}
-  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
-  .gallery-cell:first-child{grid-row:span 1;}
-}
-.contact-info{}
-.contact-row{
-  display:flex;align-items:flex-start;gap:1rem;
-  margin-bottom:2rem;
-}
-.contact-icon{
-  width:40px;height:40px;flex-shrink:0;
-  border:1px solid rgba(232,120,154,0.25);
-  display:flex;align-items:center;justify-content:center;
-}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:2.5rem;}
+.contact-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem;}
+.contact-icon{width:40px;height:40px;flex-shrink:0;border:1px solid rgba(232,120,154,0.25);display:flex;align-items:center;justify-content:center;}
 .contact-icon svg{width:18px;height:18px;stroke:var(--rose);fill:none;stroke-width:1.5;}
-.contact-key{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:3px;}
+.contact-key{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:3px;}
 .contact-val{font-size:14px;color:var(--text-light);line-height:1.6;}
-
-.contact-form{}
-.form-group{margin-bottom:1.25rem;}
-.form-group label{
-  display:block;font-size:11px;
-  letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--rose);margin-bottom:6px;
-}
-.form-group input,
-.form-group textarea,
-.form-group select{
-  width:100%;background:var(--dark-card);
-  border:0.5px solid rgba(232,120,154,0.2);
-  color:var(--text-light);
-  padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;
-  outline:none;resize:none;
-  transition:border-color 0.2s;
-  border-radius:0;
-}
-.form-group input:focus,
-.form-group textarea:focus{
-  border-color:var(--rose);
-}
+.quick-actions{display:none;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.quick-btn{flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 16px;border:1px solid rgba(232,120,154,0.3);background:var(--dark-card);color:var(--rose);font-size:13px;font-weight:500;text-decoration:none;border-radius:2px;transition:background 0.2s;-webkit-tap-highlight-color:transparent;}
+.quick-btn:active{background:#4a2030;}
+.quick-btn svg{width:17px;height:17px;stroke:var(--rose);fill:none;stroke-width:1.5;flex-shrink:0;}
+.form-group{margin-bottom:1.1rem;}
+.form-group label{display:block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--dark-card);border:0.5px solid rgba(232,120,154,0.2);color:var(--text-light);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;resize:none;transition:border-color 0.2s;border-radius:0;appearance:none;-webkit-appearance:none;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--rose);}
 .form-group textarea{height:100px;}
-.form-success{
-  display:none;
-  color:var(--rose);font-size:13px;
-  margin-top:0.75rem;text-align:center;
-  letter-spacing:0.05em;
-}
+.form-success{display:none;color:var(--rose);font-size:13px;margin-top:0.75rem;text-align:center;letter-spacing:0.05em;}
+.map-strip{background:var(--dark-card);border:0.5px solid rgba(232,120,154,0.15);display:flex;align-items:center;justify-content:center;height:72px;margin-top:1.75rem;gap:0.75rem;font-size:13px;color:var(--text-muted);text-decoration:none;transition:background 0.2s,color 0.2s;-webkit-tap-highlight-color:transparent;}
+.map-strip:hover,.map-strip:active{background:rgba(232,120,154,0.07);color:var(--rose);}
+.map-strip svg{width:18px;height:18px;stroke:var(--rose);fill:none;stroke-width:1.5;}
 
-/* ─── Map strip ─── */
-.map-strip{
-  background:var(--dark-card);
-  border:0.5px solid rgba(232,120,154,0.15);
-  border-radius:0;
-  display:flex;align-items:center;justify-content:center;
-  height:80px;margin-top:2rem;
-  gap:1rem;font-size:13px;color:var(--text-muted);
-  text-decoration:none;
-  transition:background 0.2s,color 0.2s;
-}
-.map-strip:hover{background:rgba(232,120,154,0.07);color:var(--rose);}
-.map-strip svg{width:20px;height:20px;stroke:var(--rose);fill:none;stroke-width:1.5;}
-
-/* ─── Footer ─── */
-footer{
-  background:var(--dark);
-  border-top:0.5px solid rgba(232,120,154,0.15);
-  padding:2.5rem 2rem;
-  text-align:center;
-}
-.footer-brand{
-  font-family:'Playfair Display',serif;
-  font-size:1.4rem;color:var(--rose);margin-bottom:0.5rem;
-}
-.footer-loc{font-size:12px;color:var(--text-muted);margin-bottom:1.5rem;}
-.footer-links{display:flex;gap:2rem;justify-content:center;margin-bottom:1.5rem;}
+/* ── Footer ── */
+footer{background:var(--dark);border-top:0.5px solid rgba(232,120,154,0.15);padding:2.5rem 1.5rem;text-align:center;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--rose);margin-bottom:0.4rem;}
+.footer-loc{font-size:12px;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.6;}
+.footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem;}
 .footer-links a{font-size:12px;color:var(--text-muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;}
 .footer-links a:hover{color:var(--rose);}
 .footer-copy{font-size:11px;color:rgba(196,154,170,0.4);}
 
-/* ─── Scroll reveal ─── */
-.reveal{
-  opacity:0;transform:translateY(30px);
-  transition:opacity 0.7s ease,transform 0.7s ease;
-}
+/* ── Reveal ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
 .reveal.visible{opacity:1;transform:none;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}*{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
 
-/* ─── Animations ─── */
-@keyframes fadeUp{
-  to{opacity:1;transform:translateY(0);}
+/* ── Responsive ── */
+@media(max-width:900px){.contact-wrap{grid-template-columns:1fr;gap:2rem;}.services-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}.why-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){
+  .nav-links{display:none;}.hamburger{display:flex;}.mobile-nav{display:flex;}
+  nav{padding:0.9rem 1.25rem;}nav.scrolled{padding:0.6rem 1.25rem;}
+  .section{padding:3.5rem 1.25rem;}
+  #hero{padding:5rem 1.25rem 3rem;}
+  .hero-ctas{flex-direction:column;align-items:center;}
+  .hero-ctas .btn-primary,.hero-ctas .btn-ghost{width:100%;max-width:280px;text-align:center;}
+  .services-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:repeat(2,1fr);gap:1rem;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,120px);}
+  .gallery-cell:first-child{grid-row:span 1;}
+  .quick-actions{display:flex;}
 }
-@keyframes threadFloat{
-  0%{opacity:0;transform:translateX(-100%) rotate(var(--r,0deg));}
-  20%{opacity:0.5;}
-  80%{opacity:0.3;}
-  100%{opacity:0;transform:translateX(200vw) rotate(var(--r,0deg));}
-}
-@keyframes needlePulse{
-  0%,100%{filter:drop-shadow(0 0 4px #e8789a);}
-  50%{filter:drop-shadow(0 0 10px #e8789a) drop-shadow(0 0 20px #c04a70);}
-}
-#cursor-needle svg{animation:needlePulse 2s infinite;}
-
-/* ─── Reduced motion ─── */
-@media(prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;}
-  *{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}
+@media(max-width:360px){
+  .hero-title{font-size:2rem;}
+  .why-grid{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:repeat(5,100px);}
+  .gallery-cell:first-child{grid-row:span 1;}
 }
 </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cursor">
-  <div id="cursor-needle">
-    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-      <!-- Needle body -->
-      <rect x="18.5" y="2" width="3" height="32" rx="1.5" fill="#e8789a"/>
-      <!-- Needle tip -->
-      <polygon points="20,38 17,32 23,32" fill="#f2c4d0"/>
-      <!-- Eye of needle -->
-      <ellipse cx="20" cy="7" rx="2.5" ry="3.5" fill="none" stroke="#f9f0f2" stroke-width="1.5"/>
-      <!-- Thread coming out of eye -->
-      <path d="M20 6 Q14 10 10 16 Q6 22 8 28" stroke="#d4a054" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
-    </svg>
-  </div>
+<!-- Cursor -->
+<div id="cursor"><div id="cursor-needle">
+  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <rect x="18.5" y="2" width="3" height="32" rx="1.5" fill="#e8789a"/>
+    <polygon points="20,38 17,32 23,32" fill="#f2c4d0"/>
+    <ellipse cx="20" cy="7" rx="2.5" ry="3.5" fill="none" stroke="#f9f0f2" stroke-width="1.5"/>
+    <path d="M20 6 Q14 10 10 16 Q6 22 8 28" stroke="#d4a054" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
+  </svg>
+</div></div>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" onclick="toggleMenu()">×</button>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#why" onclick="toggleMenu()">About</a>
+  <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
 </div>
 
 <!-- NAV -->
 <nav id="navbar">
-  <div class="nav-brand">
+  <a class="nav-brand" href="#">
     <span class="needle-icon">🧵</span>
     Abeez Stitching Center
-  </div>
+  </a>
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#why">About</a>
     <a href="#gallery">Gallery</a>
     <a href="#contact">Contact</a>
   </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- HERO -->
+<!-- HERO with canvas stitching animation -->
 <section id="hero">
-  <div class="hero-bg"></div>
-  <svg class="hero-threads" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 200 Q300 100 600 300 T1200 200" stroke="#e8789a" stroke-width="0.8" fill="none" opacity="0.3">
-      <animate attributeName="d" values="M0 200 Q300 100 600 300 T1200 200;M0 250 Q300 150 600 250 T1200 300;M0 200 Q300 100 600 300 T1200 200" dur="8s" repeatCount="indefinite"/>
-    </path>
-    <path d="M0 400 Q400 250 700 450 T1200 350" stroke="#c04a70" stroke-width="0.5" fill="none" opacity="0.2">
-      <animate attributeName="d" values="M0 400 Q400 250 700 450 T1200 350;M0 350 Q400 300 700 400 T1200 450;M0 400 Q400 250 700 450 T1200 350" dur="10s" repeatCount="indefinite"/>
-    </path>
-    <path d="M100 600 Q500 400 800 600 T1200 500" stroke="#f2c4d0" stroke-width="0.4" fill="none" opacity="0.15">
-      <animate attributeName="d" values="M100 600 Q500 400 800 600 T1200 500;M100 550 Q500 450 800 550 T1200 600;M100 600 Q500 400 800 600 T1200 500" dur="12s" repeatCount="indefinite"/>
-    </path>
-    <!-- Dotted stitch lines -->
-    <line x1="0" y1="140" x2="1200" y2="140" stroke="#e8789a" stroke-width="1" stroke-dasharray="6,10" opacity="0.12"/>
-    <line x1="0" y1="560" x2="1200" y2="560" stroke="#e8789a" stroke-width="1" stroke-dasharray="6,10" opacity="0.08"/>
-  </svg>
-
+  <canvas id="stitch-canvas"></canvas>
+  <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Pulpally, Wayanad · Est. since years</p>
+    <p class="hero-eyebrow">Pulpally, Wayanad · Ladies Tailoring</p>
     <h1 class="hero-title">Where fabric becomes <em>artistry</em></h1>
-    <p class="hero-sub">Abeez Ladies Stitching Center — bespoke stitching, alterations, and designer wear<br>crafted with love in the heart of Pulpally, Wayanad.</p>
+    <p class="hero-sub">Abeez Ladies Stitching Center — bespoke stitching, alterations &amp; designer wear<br>crafted with love in the heart of Pulpally, Wayanad.</p>
     <div class="hero-ctas">
       <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book an appointment</button>
       <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore services</button>
@@ -505,100 +232,103 @@ footer{
     <h2 class="section-heading reveal">Our <em>services</em></h2>
     <div class="divider reveal"></div>
     <div class="services-grid">
-
       <div class="service-item reveal">
         <div class="service-num">01</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M6 3 Q12 6 18 3 L18 14 Q12 17 6 14 Z"/><line x1="12" y1="6" x2="12" y2="17"/></svg>
-        </div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><path d="M6 3 Q12 6 18 3 L18 14 Q12 17 6 14 Z"/><line x1="12" y1="6" x2="12" y2="17"/></svg></div>
         <div class="service-name">Blouse stitching</div>
         <div class="service-desc">Designer blouses, traditional styles, boat necks, and more — tailored to your silhouette perfectly.</div>
       </div>
-
       <div class="service-item reveal">
         <div class="service-num">02</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M8 3 L4 10 L8 21 L16 21 L20 10 L16 3 Z"/><line x1="8" y1="3" x2="16" y2="3"/><line x1="6" y1="10" x2="18" y2="10"/></svg>
-        </div>
-        <div class="service-name">Churidar & salwar</div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><path d="M8 3 L4 10 L8 21 L16 21 L20 10 L16 3 Z"/><line x1="8" y1="3" x2="16" y2="3"/><line x1="6" y1="10" x2="18" y2="10"/></svg></div>
+        <div class="service-name">Churidar &amp; salwar</div>
         <div class="service-desc">Custom-fit churidar sets, salwar kameez, and Patiala suits stitched to your measurements.</div>
       </div>
-
       <div class="service-item reveal">
         <div class="service-num">03</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M12 3 Q18 6 20 12 Q18 20 12 21 Q6 20 4 12 Q6 6 12 3Z"/></svg>
-        </div>
-        <div class="service-name">Gowns & party wear</div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 3 Q18 6 20 12 Q18 20 12 21 Q6 20 4 12 Q6 6 12 3Z"/></svg></div>
+        <div class="service-name">Gowns &amp; party wear</div>
         <div class="service-desc">Bridal gowns, anarkali suits, and festive wear for every celebration — made exactly as you envision.</div>
       </div>
-
       <div class="service-item reveal">
         <div class="service-num">04</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M6 3 L3 8 L6 21 L18 21 L21 8 L18 3"/><line x1="9" y1="3" x2="15" y2="3"/></svg>
-        </div>
-        <div class="service-name">Alterations & repairs</div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><path d="M6 3 L3 8 L6 21 L18 21 L21 8 L18 3"/><line x1="9" y1="3" x2="15" y2="3"/></svg></div>
+        <div class="service-name">Alterations &amp; repairs</div>
         <div class="service-desc">Hemming, resizing, and expert repairs that breathe new life into your treasured garments.</div>
       </div>
-
       <div class="service-item reveal">
         <div class="service-num">05</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M8 14 Q12 12 16 14 L17 21 L7 21 Z"/></svg>
-        </div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M8 14 Q12 12 16 14 L17 21 L7 21 Z"/></svg></div>
         <div class="service-name">Kids' wear</div>
         <div class="service-desc">School uniforms, ethnic outfits, and party dresses for your little ones — comfy and adorable.</div>
       </div>
-
       <div class="service-item reveal">
         <div class="service-num">06</div>
-        <div class="service-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M3 17 L7 3 L12 8 L17 3 L21 17"/><line x1="3" y1="21" x2="21" y2="21"/></svg>
-        </div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 17 L7 3 L12 8 L17 3 L21 17"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div>
         <div class="service-name">Custom designs</div>
-        <div class="service-desc">Bring your fabric, your sketch, or your Pinterest board — we'll stitch your imagination into reality.</div>
+        <div class="service-desc">Bring your fabric, sketch, or idea — we'll stitch your imagination into reality.</div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- WHY US -->
+<!-- WHY US — updated cards -->
 <section id="why" class="section">
   <div class="section-inner">
     <p class="section-eyebrow reveal">Why Abeez</p>
     <h2 class="section-heading reveal">Crafted with <em>care</em></h2>
     <div class="divider reveal"></div>
     <div class="why-grid">
+
+      <!-- Card 1: replaced "On-time delivery" -->
       <div class="why-item reveal">
         <div class="why-circle">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+          <!-- Sewing machine icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e8789a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="16" height="10" rx="2"/>
+            <path d="M18 9h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2"/>
+            <circle cx="8" cy="19" r="2"/><circle cx="16" cy="19" r="2"/>
+            <line x1="8" y1="6" x2="8" y2="4"/><line x1="8" y1="4" x2="12" y2="4"/>
+            <circle cx="12" cy="11" r="1.5"/>
+          </svg>
         </div>
-        <div class="why-label">On-time delivery</div>
-        <div class="why-desc">We respect your time and always deliver as promised, without compromising on quality.</div>
+        <div class="why-label">Expert craftsmanship</div>
+        <div class="why-desc">Every garment is stitched by skilled hands with years of tailoring experience and passion.</div>
       </div>
+
+      <!-- Card 2 -->
       <div class="why-item reveal">
         <div class="why-circle">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e8789a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
         </div>
         <div class="why-label">Perfect fit, always</div>
-        <div class="why-desc">Every stitch is placed with precision — your comfort and confidence come first.</div>
+        <div class="why-desc">Every stitch placed with precision — your comfort and confidence are always our priority.</div>
       </div>
+
+      <!-- Card 3 -->
       <div class="why-item reveal">
         <div class="why-circle">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e8789a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
         </div>
-        <div class="why-label">Quality craftsmanship</div>
-        <div class="why-desc">Superior finishing and fine detailing on every garment — because you deserve the best.</div>
+        <div class="why-label">Premium quality</div>
+        <div class="why-desc">Superior finishing and fine detailing on every garment — because you deserve the very best.</div>
       </div>
+
+      <!-- Card 4 -->
       <div class="why-item reveal">
         <div class="why-circle">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e8789a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
         </div>
         <div class="why-label">Made with love</div>
-        <div class="why-desc">A women-led local business serving Pulpally families with warmth and dedication.</div>
+        <div class="why-desc">A women-led local business serving Pulpally families with warmth and dedication for years.</div>
       </div>
+
     </div>
   </div>
 </section>
@@ -610,26 +340,11 @@ footer{
     <h2 class="section-heading reveal">A glimpse of our <em>craft</em></h2>
     <div class="divider reveal"></div>
     <div class="gallery-grid reveal">
-      <div class="gallery-cell">
-        <div class="gallery-pattern"></div>
-        Blouse designs
-      </div>
-      <div class="gallery-cell">
-        <div class="gallery-pattern"></div>
-        Churidar sets
-      </div>
-      <div class="gallery-cell">
-        <div class="gallery-pattern"></div>
-        Bridal wear
-      </div>
-      <div class="gallery-cell">
-        <div class="gallery-pattern"></div>
-        Kids' outfits
-      </div>
-      <div class="gallery-cell">
-        <div class="gallery-pattern"></div>
-        Party gowns
-      </div>
+      <div class="gallery-cell"><div class="gallery-pattern"></div>Blouse designs</div>
+      <div class="gallery-cell"><div class="gallery-pattern"></div>Churidar sets</div>
+      <div class="gallery-cell"><div class="gallery-pattern"></div>Bridal wear</div>
+      <div class="gallery-cell"><div class="gallery-pattern"></div>Kids' outfits</div>
+      <div class="gallery-cell"><div class="gallery-pattern"></div>Party gowns</div>
     </div>
     <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:1rem;letter-spacing:0.08em;">Add your photos here to showcase your work.</p>
   </div>
@@ -638,7 +353,7 @@ footer{
 <!-- TESTIMONIAL -->
 <section id="testimonials" class="section">
   <div class="section-inner">
-    <p class="section-eyebrow" style="text-align:center" class="reveal">What our customers say</p>
+    <p class="section-eyebrow reveal" style="text-align:center;">What our customers say</p>
     <div class="testimonial-block reveal">
       <div class="stars">★★★★★</div>
       <p class="testimonial-quote">Got my wedding blouse and churidar stitched here — the finishing was absolutely perfect. The fit was exactly what I wanted. Highly recommend to every lady in Pulpally!</p>
@@ -653,151 +368,378 @@ footer{
     <p class="section-eyebrow reveal">Get in touch</p>
     <h2 class="section-heading reveal">Visit or <em>contact us</em></h2>
     <div class="divider reveal"></div>
+    <div class="quick-actions reveal">
+      <a class="quick-btn" href="tel:+919400573564">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        Call now
+      </a>
+      <a class="quick-btn" href="https://wa.me/919400573564" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        WhatsApp
+      </a>
+      <a class="quick-btn" href="mailto:Abhinandsuresh1928@gmail.com">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+    </div>
     <div class="contact-wrap">
-
       <div class="contact-info reveal">
         <div class="contact-row">
           <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div>
-            <div class="contact-key">Address</div>
-            <div class="contact-val">Abeez Ladies Stitching Center<br>Pulpally, Wayanad<br>Kerala — 673579</div>
-          </div>
+          <div><div class="contact-key">Address</div><div class="contact-val">Abeez Ladies Stitching Center<br>Pulpally, Wayanad<br>Kerala — 673579</div></div>
         </div>
         <div class="contact-row">
-          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></div>
-          <div>
-            <div class="contact-key">Phone</div>
-            <div class="contact-val">+91 94005 73564</div>
-          </div>
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></div>
+          <div><div class="contact-key">Phone</div><div class="contact-val"><a href="tel:+919400573564" style="color:var(--text-light);text-decoration:none;">+91 94005 73564</a></div></div>
         </div>
         <div class="contact-row">
           <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-          <div>
-            <div class="contact-key">Email</div>
-            <div class="contact-val">Abhinandsuresh1928@gmail.com</div>
-          </div>
+          <div><div class="contact-key">Email</div><div class="contact-val" style="word-break:break-all;"><a href="mailto:Abhinandsuresh1928@gmail.com" style="color:var(--text-light);text-decoration:none;">Abhinandsuresh1928@gmail.com</a></div></div>
         </div>
         <div class="contact-row">
           <div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div>
-          <div>
-            <div class="contact-key">Working hours</div>
-            <div class="contact-val">Monday – Saturday<br>9:00 AM – 6:00 PM</div>
-          </div>
+          <div><div class="contact-key">Working hours</div><div class="contact-val">Monday – Saturday<br>9:00 AM – 6:00 PM</div></div>
         </div>
-
         <a class="map-strip" href="https://maps.google.com/?q=Pulpally,Wayanad,Kerala,673579" target="_blank">
           <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-          Open location in Google Maps
+          Open in Google Maps
         </a>
       </div>
-
       <div class="contact-form reveal">
-        <div class="form-group">
-          <label>Your name</label>
-          <input type="text" id="f-name" placeholder="e.g. Priya Nair"/>
-        </div>
-        <div class="form-group">
-          <label>Phone number</label>
-          <input type="tel" id="f-phone" placeholder="+91 …"/>
-        </div>
-        <div class="form-group">
-          <label>Service needed</label>
+        <div class="form-group"><label>Your name</label><input type="text" id="f-name" placeholder="e.g. Priya Nair" autocomplete="name"/></div>
+        <div class="form-group"><label>Phone number</label><input type="tel" id="f-phone" placeholder="+91 …" autocomplete="tel"/></div>
+        <div class="form-group"><label>Service needed</label>
           <select id="f-service">
             <option value="">Select a service</option>
-            <option>Blouse stitching</option>
-            <option>Churidar / Salwar</option>
-            <option>Gown / Party wear</option>
-            <option>Alteration / Repair</option>
-            <option>Kids' wear</option>
-            <option>Custom design</option>
+            <option>Blouse stitching</option><option>Churidar / Salwar</option>
+            <option>Gown / Party wear</option><option>Alteration / Repair</option>
+            <option>Kids' wear</option><option>Custom design</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Message</label>
-          <textarea id="f-message" placeholder="Tell us about your requirement…"></textarea>
-        </div>
-        <button class="btn-primary" onclick="submitForm()" style="width:100%;">Send message</button>
+        <div class="form-group"><label>Message</label><textarea id="f-message" placeholder="Tell us about your requirement…"></textarea></div>
+        <button class="btn-primary" onclick="submitForm()" style="width:100%;padding:14px;">Send message</button>
         <div class="form-success" id="form-success">✓ Thank you! We'll get back to you shortly.</div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-brand">Abeez Ladies Stitching Center</div>
-  <div class="footer-loc">Pulpally, Wayanad, Kerala — 673579 &nbsp;·&nbsp; +91 94005 73564</div>
+  <div class="footer-loc">Pulpally, Wayanad, Kerala — 673579<br>+91 94005 73564</div>
   <div class="footer-links">
-    <a href="#services">Services</a>
-    <a href="#why">About</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#contact">Contact</a>
+    <a href="#services">Services</a><a href="#why">About</a>
+    <a href="#gallery">Gallery</a><a href="#contact">Contact</a>
   </div>
   <div class="footer-copy">© 2025 Abeez Ladies Stitching Center. All rights reserved.</div>
 </footer>
 
 <script>
-/* ─── Cursor ─── */
-const cursor = document.getElementById('cursor');
-const trails = [];
-const TRAIL_COUNT = 12;
-for(let i=0;i<TRAIL_COUNT;i++){
-  const d=document.createElement('div');
-  d.className='trail-dot';
-  document.body.appendChild(d);
-  trails.push({el:d,x:0,y:0});
-}
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cursor.style.left=mx+'px';
-  cursor.style.top=my+'px';
-});
-function animateTrail(){
-  let px=mx,py=my;
-  trails.forEach((t,i)=>{
-    const prev=i===0?{x:mx,y:my}:trails[i-1];
-    t.x+=(prev.x-t.x)*0.25;
-    t.y+=(prev.y-t.y)*0.25;
-    t.el.style.left=t.x+'px';
-    t.el.style.top=t.y+'px';
-    t.el.style.opacity=(1-i/TRAIL_COUNT)*0.5;
-    t.el.style.width=(5-i*0.3)+'px';
-    t.el.style.height=(5-i*0.3)+'px';
-  });
-  requestAnimationFrame(animateTrail);
-}
-animateTrail();
+/* ═══════════════════════════════════════════════
+   STITCHING CANVAS BACKGROUND ANIMATION
+   Draws: fabric grid, multiple needle+thread paths
+   being stitched in real-time, shimmering sparkles
+═══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('stitch-canvas');
+  const ctx = canvas.getContext('2d');
 
-/* ─── Nav scroll ─── */
-const navbar=document.getElementById('navbar');
-window.addEventListener('scroll',()=>{
-  navbar.classList.toggle('scrolled',window.scrollY>50);
-});
+  function resize(){
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-/* ─── Scroll reveal ─── */
-const revealEls=document.querySelectorAll('.reveal');
-const io=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('visible'),i*80);
-      io.unobserve(e.target);
+  /* ── Fabric grid ── */
+  function drawFabric(){
+    const W=canvas.width, H=canvas.height;
+    const sz=32;
+    ctx.strokeStyle='rgba(232,120,154,0.045)';
+    ctx.lineWidth=0.5;
+    for(let x=0;x<W;x+=sz){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=sz){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    // Diagonal weave threads
+    ctx.strokeStyle='rgba(212,160,84,0.03)';
+    ctx.lineWidth=0.4;
+    for(let x=-H;x<W+H;x+=sz*2){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+H,H);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-H,H);ctx.stroke();
     }
-  });
-},{threshold:0.12});
-revealEls.forEach(el=>io.observe(el));
+  }
 
-/* ─── Form ─── */
+  /* ── Thread path generator ── */
+  // Each path is a horizontal zigzag stitch line
+  function makePath(yBase){
+    const W=canvas.width;
+    const pts=[];
+    const seg=28; // stitch length
+    const amp=6;  // zigzag amplitude
+    let x=0;
+    while(x<W+seg){
+      pts.push({x, y: yBase + (pts.length%2===0?-amp:amp)});
+      x+=seg;
+    }
+    return pts;
+  }
+
+  /* ── Needle state ── */
+  const COLORS=['#e8789a','#f2c4d0','#d4a054','#c04a70','#f5e6e8'];
+  class StitchLine {
+    constructor(yBase, color, speed, delay){
+      this.yBase=yBase; this.color=color; this.speed=speed;
+      this.pts=[]; this.progress=0; this.delay=delay; this.age=0;
+      this.alpha=0;
+    }
+    init(){
+      this.pts=makePath(this.yBase);
+      this.progress=0; this.age=0; this.alpha=0;
+    }
+    // Get interpolated position along pts
+    posAt(t){
+      if(t<=0) return this.pts[0];
+      const total=this.pts.length-1;
+      const fi=t*total;
+      const i=Math.floor(fi);
+      const frac=fi-i;
+      if(i>=total) return this.pts[total];
+      const a=this.pts[i], b=this.pts[i+1];
+      return {x:a.x+(b.x-a.x)*frac, y:a.y+(b.y-a.y)*frac};
+    }
+    update(dt){
+      if(this.delay>0){this.delay-=dt;return;}
+      this.age+=dt;
+      this.alpha=Math.min(1,this.age/600); // fade in
+      this.progress=Math.min(1,this.progress+dt*this.speed*0.00018);
+    }
+    draw(){
+      if(this.alpha<=0||this.pts.length<2) return;
+      const total=this.pts.length-1;
+      const endIdx=this.progress*total;
+      const endFull=Math.floor(endIdx);
+
+      // Draw completed stitches (dashed segments)
+      ctx.save();
+      ctx.globalAlpha=this.alpha*0.55;
+      ctx.strokeStyle=this.color;
+      ctx.lineWidth=1.4;
+      ctx.setLineDash([8,10]);
+      ctx.lineDashOffset=0;
+      ctx.beginPath();
+      ctx.moveTo(this.pts[0].x, this.pts[0].y);
+      for(let i=1;i<=Math.min(endFull,total);i++){
+        ctx.lineTo(this.pts[i].x, this.pts[i].y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Partial last segment
+      if(endIdx<total){
+        const a=this.pts[endFull];
+        const b=this.pts[Math.min(endFull+1,total)];
+        const frac=endIdx-endFull;
+        const px=a.x+(b.x-a.x)*frac;
+        const py=a.y+(b.y-a.y)*frac;
+        ctx.globalAlpha=this.alpha*0.55;
+        ctx.strokeStyle=this.color;
+        ctx.lineWidth=1.4;
+        ctx.setLineDash([8,10]);
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(px,py);ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Needle at tip
+        if(this.progress>0.02){
+          const nx=px, ny=py;
+          ctx.globalAlpha=this.alpha*0.9;
+          // Needle body
+          const ang=Math.atan2(b.y-a.y,b.x-a.x);
+          ctx.save();
+          ctx.translate(nx,ny);ctx.rotate(ang);
+          ctx.fillStyle='#e8789a';
+          ctx.beginPath();ctx.roundRect(-16,-1.5,28,3,1.5);ctx.fill();
+          // Eye
+          ctx.strokeStyle='rgba(249,240,242,0.7)';ctx.lineWidth=1.2;
+          ctx.beginPath();ctx.ellipse(-13,0,3,1.5,0,0,Math.PI*2);ctx.stroke();
+          // Tip glow
+          ctx.fillStyle='#f2c4d0';
+          ctx.beginPath();ctx.arc(13,0,3,0,Math.PI*2);ctx.fill();
+          ctx.fillStyle='rgba(232,120,154,0.3)';
+          ctx.beginPath();ctx.arc(13,0,6,0,Math.PI*2);ctx.fill();
+          ctx.restore();
+
+          // Gold thread trailing from eye
+          ctx.globalAlpha=this.alpha*0.4;
+          ctx.strokeStyle='#d4a054';ctx.lineWidth=0.8;
+          ctx.setLineDash([3,4]);
+          ctx.beginPath();
+          const ex=nx+Math.cos(ang)*(-13), ey=ny+Math.sin(ang)*(-13);
+          ctx.moveTo(ex,ey);
+          // wiggle back a bit
+          ctx.quadraticCurveTo(ex-Math.cos(ang)*20+Math.sin(ang)*8, ey-Math.sin(ang)*20-Math.cos(ang)*8, ex-Math.cos(ang)*40, ey-Math.sin(ang)*40);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+      ctx.restore();
+    }
+  }
+
+  /* ── Sparkles ── */
+  class Sparkle{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*canvas.width;
+      this.y=Math.random()*canvas.height;
+      this.r=Math.random()*1.8+0.4;
+      this.life=0;this.maxLife=Math.random()*2000+1000;
+      this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+    }
+    update(dt){this.life+=dt;}
+    draw(){
+      const t=this.life/this.maxLife;
+      const a=t<0.3?t/0.3:t>0.7?(1-t)/0.3:1;
+      ctx.save();ctx.globalAlpha=a*0.5;
+      ctx.fillStyle=this.color;
+      ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();
+      if(a>0.5){
+        // Cross sparkle
+        ctx.strokeStyle=this.color;ctx.lineWidth=0.5;ctx.globalAlpha=a*0.3;
+        const s=this.r*4;
+        ctx.beginPath();ctx.moveTo(this.x-s,this.y);ctx.lineTo(this.x+s,this.y);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(this.x,this.y-s);ctx.lineTo(this.x,this.y+s);ctx.stroke();
+      }
+      ctx.restore();
+    }
+    get done(){return this.life>=this.maxLife;}
+  }
+
+  /* ── Build stitch lines ── */
+  function buildLines(){
+    const H=canvas.height;
+    const rows=Math.ceil(H/55)+2;
+    const lines=[];
+    for(let i=0;i<rows;i++){
+      const y=30+i*55+Math.random()*10;
+      const color=COLORS[i%COLORS.length];
+      const speed=0.4+Math.random()*0.4;
+      const delay=i*220+Math.random()*300;
+      const sl=new StitchLine(y,color,speed,delay);
+      sl.init();
+      lines.push(sl);
+    }
+    return lines;
+  }
+
+  let lines=buildLines();
+  const sparkles=Array.from({length:40},()=>new Sparkle());
+  let last=0;
+
+  function frame(ts){
+    const dt=last?Math.min(ts-last,50):16;
+    last=ts;
+    const W=canvas.width, H=canvas.height;
+
+    ctx.clearRect(0,0,W,H);
+
+    // Background deep color
+    ctx.fillStyle='#1a0a0e';
+    ctx.fillRect(0,0,W,H);
+
+    drawFabric();
+
+    // Update & draw stitch lines; restart finished ones
+    for(const l of lines){
+      l.update(dt);
+      if(l.progress>=1){
+        // Restart from new position
+        l.yBase=30+Math.random()*(H-60);
+        l.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+        l.speed=0.38+Math.random()*0.45;
+        l.delay=Math.random()*1200;
+        l.init();
+      }
+      l.draw();
+    }
+
+    // Sparkles
+    for(const s of sparkles){
+      s.update(dt);s.draw();
+      if(s.done) s.reset();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // Rebuild lines on resize
+  window.addEventListener('resize',()=>{lines=buildLines();});
+})();
+
+/* ═══════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════ */
+const isTouchDevice=()=>window.matchMedia('(hover:none)').matches;
+const cursor=document.getElementById('cursor');
+const trails=[];
+const TRAIL_COUNT=12;
+if(!isTouchDevice()){
+  for(let i=0;i<TRAIL_COUNT;i++){
+    const d=document.createElement('div');d.className='trail-dot';
+    document.body.appendChild(d);trails.push({el:d,x:0,y:0});
+  }
+  let mx=0,my=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    cursor.style.left=mx+'px';cursor.style.top=my+'px';
+  });
+  function animateTrail(){
+    trails.forEach((t,i)=>{
+      const prev=i===0?{x:mx,y:my}:trails[i-1];
+      t.x+=(prev.x-t.x)*0.25;t.y+=(prev.y-t.y)*0.25;
+      t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';
+      t.el.style.opacity=(1-i/TRAIL_COUNT)*0.5;
+      t.el.style.width=(5-i*0.3)+'px';t.el.style.height=(5-i*0.3)+'px';
+    });
+    requestAnimationFrame(animateTrail);
+  }
+  animateTrail();
+}
+
+/* ── Hamburger ── */
+function toggleMenu(){
+  const menu=document.getElementById('mobileNav');
+  const btn=document.getElementById('hamburger');
+  const isOpen=menu.classList.toggle('open');
+  btn.classList.toggle('open',isOpen);
+  document.body.style.overflow=isOpen?'hidden':'';
+}
+document.getElementById('mobileNav').addEventListener('click',function(e){if(e.target===this)toggleMenu();});
+
+/* ── Nav scroll ── */
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>50),{passive:true});
+
+/* ── Reveal ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach((e,idx)=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),idx*60);io.unobserve(e.target);}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ── Form ── */
 function submitForm(){
   const name=document.getElementById('f-name').value.trim();
   const phone=document.getElementById('f-phone').value.trim();
   if(!name||!phone){alert('Please enter your name and phone number.');return;}
-  document.getElementById('form-success').style.display='block';
-  document.getElementById('f-name').value='';
-  document.getElementById('f-phone').value='';
-  document.getElementById('f-message').value='';
-  document.getElementById('f-service').value='';
+  const btn=event.currentTarget;
+  btn.textContent='Sending…';btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('form-success').style.display='block';
+    btn.textContent='Send message';btn.disabled=false;
+    ['f-name','f-phone','f-message'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-service').value='';
+  },800);
 }
 </script>
 </body>
