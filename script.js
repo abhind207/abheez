@@ -129,35 +129,34 @@ const STORAGE_KEY = 'abeeez_bookings';
       status:    'Pending'
     };
  
-    // ── Save to localStorage (production: replace with backend API call) ──
-    /*
-    BACKEND INTEGRATION POINT:
-    Replace the localStorage block below with an API call, e.g.:
-    const response = await fetch('/api/bookings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(booking)
-    });
-    The backend should then:
-    1. Store in database
-    2. Send confirmation email to abhinandsuresh1928@gmail.com
-    3. (Optional) Send SMS via Twilio / MSG91
-    */
-    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     existing.push(booking);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
- 
-    // EmailJS integration (configure with your EmailJS keys)
-    // emailjs.send('SERVICE_ID', 'TEMPLATE_ID', {
-    //   to_email: 'abhinandsuresh1928@gmail.com',
-    //   customer_name: booking.name,
-    //   customer_phone: booking.phone,
-    //   customer_email: booking.email,
-    //   preferred_date: booking.date,
-    //   service: booking.service,
-    //   notes: booking.notes,
-    //   booking_id: booking.id
-    // });
+
+    try {
+      await fetch('https://formsubmit.co/ajax/abhinandsuresh1928@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `New Appointment Request – ${booking.name}`,
+          _template: 'table',
+          _captcha: 'false',
+          name: booking.name,
+          phone: booking.phone,
+          email: booking.email || 'Not provided',
+          preferred_date: booking.date,
+          service: booking.service,
+          notes: booking.notes || 'No additional notes provided.',
+          booking_id: booking.id,
+          message: `New appointment request received.\n\nCustomer: ${booking.name}\nPhone: ${booking.phone}\nEmail: ${booking.email || 'Not provided'}\nPreferred Date: ${booking.date}\nService: ${booking.service}\nNotes: ${booking.notes || 'No additional notes provided.'}\nBooking ID: ${booking.id}`
+        })
+      });
+    } catch (mailError) {
+      console.warn('Booking email could not be sent automatically.', mailError);
+    }
  
     // Simulate network delay
     await new Promise(r => setTimeout(r, 1400));
